@@ -10,15 +10,26 @@ var cors = require('cors');
 
 var app = express();
 
-// Basic Configuration 
 var port = process.env.PORT || 3000;
+
+app.use(cors());
+app.use(bodyParser.urlencoded({extended: false}))
 
 mongoose.connect(process.env.MONGO_URI);
 
-app.use(cors());
+var Schema = mongoose.Schema;
 
-/** this project needs to parse POST bodies **/
-// you should mount the body-parser here
+var urlSchema = new Schema({
+  original_url: String,
+  shorten_url: String
+})
+
+var Url = mongoose.model('Url', urlSchema)
+
+var createAndSaveUrl = function(done) {
+
+  Url.save({original_url: 'dasd', shorten_url: '123'}, (err, data) =>  err ? done(err) : done(null, data))
+};
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
@@ -26,8 +37,10 @@ app.get('/', function(req, res){
   res.sendFile(process.cwd() + '/views/index.html');
 });
 
-app.get("/api/shorturl/new", (req, res) => {
-  
+app.post("/api/shorturl/new", (req, res) => {
+  dns.lookup(req.body.new, (err, data) => {
+    console.log(data)
+  })
 });
 
 
