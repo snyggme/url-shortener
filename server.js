@@ -43,6 +43,7 @@ app.post("/api/shorturl/new", (req, res) => {
                :
                newUrl.save((err, data) =>  err ? console.log(err) : console.log(data))
   )
+  
 });
 
 app.get("/api/shorturl/:shortenUrl", (req, res) => {
