@@ -22,15 +22,10 @@ var Schema = mongoose.Schema;
 
 var urlSchema = new Schema({
   original_url: String,
-  shorten_url: String
+  shorten_url: Number
 })
 
 var Url = mongoose.model('Url', urlSchema)
-
-var createAndSaveUrl = function(done) {
-
-  Url.save({original_url: 'dasd', shorten_url: '123'}, (err, data) =>  err ? done(err) : done(null, data))
-};
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
@@ -39,19 +34,19 @@ app.get('/', function(req, res){
 });
 
 app.post("/api/shorturl/new", (req, res) => {
-  const originUrl = req.body.url;
+  const originUrl = req.body.url
   const hostname = url.parse(req.body.url).hostname
   
   dns.lookup(hostname, (err, address, family) => 
              err || hostname === null ? 
                res.json({error: 'Invalid URL'})
                :
-               res.json({err: err, address: address, family: family})
+               Url.save({original_url: originUrl, shorten_url: 1}, (err, data) =>  err ? console.log(err) : console.log(data))
   )
 });
 
-app.get("/api/shorturl/:shorten_url", (req, res) => {
-  Url.findOne({shorten_url: req.params.shortenUrl})
+app.get("/api/shorturl/:shortenUrl", (req, res) => {
+  Url.findOne({shorten_url: req.params.shortenUrl}).exec((err, data) => err ? console.log(err) : res.json({data: data}))
 })
 
 
