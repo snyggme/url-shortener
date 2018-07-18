@@ -38,10 +38,11 @@ app.get('/', function(req, res){
 });
 
 app.post("/api/shorturl/new", (req, res) => {
-  let url = ''
-  if (/^https/.test(req.body.url))
+  let url = req.body.url
+  url.replace(/https/g,'')
+  console.log(url)
   dns.lookup(req.body.url, (err, address, family) => {
-    
+    res.json({err: err, address: address, family: family})
   })
 });
 
