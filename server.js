@@ -37,17 +37,18 @@ app.post("/api/shorturl/new", (req, res) => {
   const originUrl = req.body.url
   const hostname = url.parse(req.body.url).hostname
   const newUrl = new Url({original_url: originUrl, shorten_url: 1})
+  
   dns.lookup(hostname, (err, address, family) => 
              err || hostname === null ? 
                res.json({error: 'Invalid URL'})
                :
-               newUrl.save((err, data) =>  err ? console.log(err) : console.log(data))
+               newUrl.save((err, data) =>  err ? console.log(err) : res.send({original_url: originUrl, shorten_url: 1}))
   )
   
 });
 
 app.get("/api/shorturl/:shortenUrl", (req, res) => {
-  Url.findOne({shorten_url: req.params.shortenUrl}).exec((err, data) => err ? console.log(err) : res.json({data: data}))
+  Url.findOne({shorten_url: req.params.shortenUrl}).exec((err, data) => err ? res.json({error: err}) : res.redirect(data.original_url))
 })
 
 
