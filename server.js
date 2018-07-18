@@ -38,10 +38,13 @@ app.get('/', function(req, res){
 });
 
 app.post("/api/shorturl/new", (req, res) => {
-  let url = req.body.url
-  url.replace(/https/g,'')
+  let [url] = [req.body.url]
+  url.replace(/https/g,'432')
   console.log(url)
-  dns.lookup(req.body.url, (err, address, family) => {
+  const options = {
+    hints: dns.ADDRCONFIG | dns.V4MAPPED
+  };
+  dns.lookup(req.body.url, options,(err, address, family) => {
     res.json({err: err, address: address, family: family})
   })
 });
