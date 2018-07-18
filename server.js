@@ -38,8 +38,8 @@ app.get('/', function(req, res){
 });
 
 app.post("/api/shorturl/new", (req, res) => {
-  dns.lookup(req.body.new, (err, data) => {
-    console.log(data)
+  dns.lookup(req.body.url, (err, address, family) => {
+    res.json({err: err, address: address, family: family})
   })
 });
 
