@@ -39,7 +39,7 @@ app.post("/api/shorturl/new", (req, res) => {
   const originUrl = req.body.url
   const hostname = url.parse(req.body.url).hostname
   const newUrl = new Url({original_url: originUrl, shorten_url: ++counter})
-  console.log(originUrl + ' and ' + newUrl)
+
   dns.lookup(hostname, (err, address, family) => 
              err || hostname === null ? 
                res.json({error: 'Invalid URL'}) 
