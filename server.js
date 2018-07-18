@@ -3,9 +3,9 @@
 var express = require('express');
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-const dns = require('dns');
-const bodyParser = require('body-parser')
-const url = require('url')
+var dns = require('dns');
+var bodyParser = require('body-parser')
+var url = require('url')
 
 var cors = require('cors');
 
@@ -39,6 +39,7 @@ app.get('/', function(req, res){
 });
 
 app.post("/api/shorturl/new", (req, res) => {
+  const originUrl = req.body.url;
   const hostname = url.parse(req.body.url).hostname
   
   dns.lookup(hostname, (err, address, family) => 
@@ -48,6 +49,10 @@ app.post("/api/shorturl/new", (req, res) => {
                res.json({err: err, address: address, family: family})
   )
 });
+
+app.get("/api/shorturl/:shorten_url", (req, res) => {
+  Url.findOne({shorten_url: req.params.shortenUrl})
+})
 
 
 app.listen(port, function () {
