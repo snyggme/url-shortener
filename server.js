@@ -5,6 +5,7 @@ var mongo = require('mongodb');
 var mongoose = require('mongoose');
 const dns = require('dns');
 const bodyParser = require('body-parser')
+const url = require('url')
 
 var cors = require('cors');
 
@@ -38,15 +39,12 @@ app.get('/', function(req, res){
 });
 
 app.post("/api/shorturl/new", (req, res) => {
-  let [url] = [req.body.url]
-  url.replace(/https/g,'432')
-  console.log(url)
-  const options = {
-    hints: dns.ADDRCONFIG | dns.V4MAPPED
-  };
-  dns.lookup(req.body.url, options,(err, address, family) => {
-    res.json({err: err, address: address, family: family})
-  })
+  dns.lookup(url.parse(req.body.url).hostname, (err, address, family) => 
+             err ? 
+               res.json({error: 'Invalid URL'})
+               :
+               res.json({err: err, address: address, family: family})
+  )
 });
 
 
