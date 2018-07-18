@@ -16,7 +16,7 @@ var port = process.env.PORT || 3000;
 app.use(cors());
 app.use(bodyParser.urlencoded({extended: false}))
 
-mongoose.connect(process.env.MONGO_URI);
+mongoose.createConnection(process.env.MONGO_URI);
 
 var Schema = mongoose.Schema;
 
@@ -39,8 +39,10 @@ app.get('/', function(req, res){
 });
 
 app.post("/api/shorturl/new", (req, res) => {
-  dns.lookup(url.parse(req.body.url).hostname, (err, address, family) => 
-             err ? 
+  const hostname = url.parse(req.body.url).hostname
+  
+  dns.lookup(hostname, (err, address, family) => 
+             err || hostname === null ? 
                res.json({error: 'Invalid URL'})
                :
                res.json({err: err, address: address, family: family})
