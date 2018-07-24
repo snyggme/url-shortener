@@ -41,14 +41,18 @@ app.post("/api/shorturl/new", (req, res) => {
   const hostname = url.parse(req.body.url).hostname
   //Object.keys(obj).length
   
-  Url.findOne({original_url: originUrl}, (err, data) =>
-          err
-            ? console.log(err)
-            : res.send({
+  Url.findOne({original_url: originUrl}, (err, data) => {
+    if (err)
+      console.log(err)
+    else {
+      res.send({
                 error: 'This site already have shorten URL',
                 original_url: originUrl,
                 shorten_url: data.shorten_url
-              }))
+              })
+      return
+    } 
+  })
   
   Url.find({}, (err, data) => {
     if (err) {
@@ -72,9 +76,9 @@ app.post("/api/shorturl/new", (req, res) => {
                 err 
                   ? console.log(err)
                   : res.send({
-                    original_url: originUrl,
-                    shorten_url: counter
-                  }))
+                      original_url: originUrl,
+                      shorten_url: counter
+                    }))
   )
 });
 
