@@ -43,12 +43,12 @@ const isUrlAlreadyExist = (url) => {
       console.log(err);
       return;
     }
-    console.log('/*/*/*/*/*/im here//////*/*/*/*/*/')
-    // if (typeof data.shorten_url === 'number')
+    console.log(typeof data.shorten_url === 'number')
+    console.log(data.shorten_url)
+    if (typeof data.shorten_url === 'number')
       isExist = true;
-  })
-  
-  return isExist;
+    return isExist;
+  })  
 }
 
 app.post("/api/shorturl/new", (req, res) => {
@@ -58,10 +58,11 @@ app.post("/api/shorturl/new", (req, res) => {
   //Object.keys(obj).length
   
   if (isUrlAlreadyExist(originUrl)) {
-    res.json({ error: 'This site already have shorten URL' });
-    // return;
+    console.log('is exist')
+    res.send({ error: 'This site already have shorten URL' });
+    return;
   }
-    
+    res.send({err: 'not me'})
 //   Url.find({}, (err, data) => {
 //     if (err) {
 //       console.log(err);
