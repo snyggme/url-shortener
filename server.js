@@ -41,6 +41,18 @@ app.post("/api/shorturl/new", (req, res) => {
   const hostname = url.parse(req.body.url).hostname
   //Object.keys(obj).length
   
+  Url.find({original_url: hostname}, (err, data) =>
+          err ? )
+  
+  Url.find({}, (err, data) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    console.log(data);
+    counter = Object.keys(data).length;
+    console.log(counter);
+  })
 
   
   const newUrl = new Url({
@@ -67,16 +79,16 @@ app.get("/api/shorturl/:shortenUrl", (req, res) => {
 })
 
 app.get("/api/shorturl", (req, res) => {
-    Url.remove({});
+    // Url.remove({}, (err, data) => err ? console.log(err) : console.log(data));
     Url.find({}, (err, data) => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    console.log(data);
-    counter = Object.keys(data).length;
-    console.log(counter);
-  })
+      if (err) {
+        console.log(err);
+        return;
+      }
+      console.log(data);
+      counter = Object.keys(data).length;
+      console.log(counter);
+    })
 })
 
 
