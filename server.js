@@ -41,8 +41,14 @@ app.post("/api/shorturl/new", (req, res) => {
   const hostname = url.parse(req.body.url).hostname
   //Object.keys(obj).length
   
-  Url.find({original_url: hostname}, (err, data) =>
-          err ? )
+  Url.findOne({original_url: hostname}, (err, data) =>
+          err
+            ? console.log(err)
+            : res.send({
+                error: 'This site already have shorten URL',
+                original_url: data.original_url,
+                shorten_url: data.shorten_url
+              }))
   
   Url.find({}, (err, data) => {
     if (err) {
