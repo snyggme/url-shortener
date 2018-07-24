@@ -41,33 +41,42 @@ app.post("/api/shorturl/new", (req, res) => {
   const hostname = url.parse(req.body.url).hostname
   //Object.keys(obj).length
   
-  Url.find({}, (err, data) => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    counter = Object.keys(data).length;
-    console.log(counter);
-  })
+
   
   const newUrl = new Url({
     original_url: originUrl, 
     shorten_url: counter
   })
 
-  dns.lookup(hostname, (err, address, family) => 
-            err || hostname === null 
-              ? res.json({error: 'Invalid URL'}) 
-              : newUrl.save((err, data) =>  
-                err 
-                  ? console.log(err)
-                  : res.send({original_url: originUrl, shorten_url: counter}))
-  )
+  // dns.lookup(hostname, (err, address, family) => 
+  //           err || hostname === null 
+  //             ? res.json({error: 'Invalid URL'}) 
+  //             : newUrl.save((err, data) =>  
+  //               err 
+  //                 ? console.log(err)
+  //                 : res.send({original_url: originUrl, shorten_url: counter}))
+  // )
 });
 
 app.get("/api/shorturl/:shortenUrl", (req, res) => {
   Url.findOne({shorten_url: req.params.shortenUrl}, 
-              (err, data) => err ? res.json({error: err}) : res.redirect(data.original_url))
+              (err, data) => 
+                err 
+                  ? res.json({error: err}) 
+                  : res.redirect(data.original_url))
+})
+
+app.get("/api/shorturl", (req, res) => {
+    Url.remove({});
+    Url.find({}, (err, data) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    console.log(data);
+    counter = Object.keys(data).length;
+    console.log(counter);
+  })
 })
 
 
