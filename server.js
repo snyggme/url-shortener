@@ -35,47 +35,44 @@ app.get('/', function(req, res){
   res.sendFile(process.cwd() + '/views/index.html');
 });
 
-const isUrlAlreadyExist = (url) => {
-  let isExist = false;
-  
-  
-}
-
 app.post("/api/shorturl/new", (req, res) => {
   const originUrl = req.body.url
   
   const hostname = url.parse(req.body.url).hostname
   
   Url.findOne({ original_url: url}, (err, data) => {
-    if (err)
-      return console.log(err)
- 
+    if (err) {
+      console.log(err)
+      return
+    }
+ console.log('whaaaaaat')
     if (typeof data.shorten_url === 'number') {
       res.send({error: 'This site already have shorten URL'})  
     } else {
-      Url.find({}, (err, data) => {
-        if (err)
-          return console.log(err)
+      console.log('asdjalksdjlkasjdlkasjdlkjas******************')
+//       Url.find({}, (err, data) => {
+//         if (err)
+//           return console.log(err)
         
-        counter = Object.keys(data).length;
+//         counter = Object.keys(data).length;
         
-        const newUrl = new Url({
-          original_url: originUrl, 
-          shorten_url: ++counter
-        })
+//         const newUrl = new Url({
+//           original_url: originUrl, 
+//           shorten_url: ++counter
+//         })
         
-        dns.lookup(hostname, (err, address, family) => 
-            err || hostname === null 
-              ? res.json({error: 'Invalid URL'}) 
-              : newUrl.save((err, data) =>  
-                err 
-                  ? console.log(err)
-                  : res.send({
-                      original_url: originUrl,
-                      shorten_url: counter
-                    }))
-        )   
-      })
+//         dns.lookup(hostname, (err, address, family) => 
+//             err || hostname === null 
+//               ? res.json({error: 'Invalid URL'}) 
+//               : newUrl.save((err, data) =>  
+//                 err 
+//                   ? console.log(err)
+//                   : res.send({
+//                       original_url: originUrl,
+//                       shorten_url: counter
+//                     }))
+//         )   
+//       })
     }
  
   })  
