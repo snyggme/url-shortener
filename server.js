@@ -40,39 +40,39 @@ app.post("/api/shorturl/new", (req, res) => {
   
   const hostname = url.parse(req.body.url).hostname
   
-  Url.findOne({ original_url: url}, (err, data) => {
+  Url.findOne({ original_url: originUrl}, (err, data) => {
     if (err) {
       console.log(err)
       return
     }
- console.log('whaaaaaat')
-    if (typeof data.shorten_url === 'number') {
+
+    if (data !== null) {
       res.send({error: 'This site already have shorten URL'})  
     } else {
       console.log('asdjalksdjlkasjdlkasjdlkjas******************')
-//       Url.find({}, (err, data) => {
-//         if (err)
-//           return console.log(err)
+      Url.find({}, (err, data) => {
+        if (err)
+          return console.log(err)
         
-//         counter = Object.keys(data).length;
+        counter = Object.keys(data).length;
         
-//         const newUrl = new Url({
-//           original_url: originUrl, 
-//           shorten_url: ++counter
-//         })
+        const newUrl = new Url({
+          original_url: originUrl, 
+          shorten_url: ++counter
+        })
         
-//         dns.lookup(hostname, (err, address, family) => 
-//             err || hostname === null 
-//               ? res.json({error: 'Invalid URL'}) 
-//               : newUrl.save((err, data) =>  
-//                 err 
-//                   ? console.log(err)
-//                   : res.send({
-//                       original_url: originUrl,
-//                       shorten_url: counter
-//                     }))
-//         )   
-//       })
+        dns.lookup(hostname, (err, address, family) => 
+            err || hostname === null 
+              ? res.json({error: 'Invalid URL'}) 
+              : newUrl.save((err, data) =>  
+                err 
+                  ? console.log(err)
+                  : res.send({
+                      original_url: originUrl,
+                      shorten_url: counter
+                    }))
+        )   
+      })
     }
  
   })  
