@@ -36,14 +36,14 @@ app.get('/', function(req, res){
 });
 
 const isUrlAlreadyExist = (url) => {
-  const isExist = false;
+  let isExist = false;
   
   Url.findOne({ original_url: url}, (err, data) => {
     if (err) {
       console.log(err);
       return;
     }
-    
+    console.log('/*/*/*/*/*/im here//////*/*/*/*/*/')
     // if (typeof data.shorten_url === 'number')
       isExist = true;
   })
@@ -57,37 +57,37 @@ app.post("/api/shorturl/new", (req, res) => {
   const hostname = url.parse(req.body.url).hostname
   //Object.keys(obj).length
   
-  // if (isUrlAlreadyExist(originUrl)) {
-  //   res.send({ error: 'This site already have shorten URL' });
-  //   return;
-  // }
+  if (isUrlAlreadyExist(originUrl)) {
+    res.json({ error: 'This site already have shorten URL' });
+    // return;
+  }
     
-  Url.find({}, (err, data) => {
-    if (err) {
-      console.log(err);
-      return;
-    }
+//   Url.find({}, (err, data) => {
+//     if (err) {
+//       console.log(err);
+//       return;
+//     }
     
-    counter = Object.keys(data).length;
-    console.log(counter);
-  })
+//     counter = Object.keys(data).length;
+//     console.log(counter);
+//   })
 
-  const newUrl = new Url({
-    original_url: originUrl, 
-    shorten_url: ++counter
-  })
+//   const newUrl = new Url({
+//     original_url: originUrl, 
+//     shorten_url: ++counter
+//   })
 
-  dns.lookup(hostname, (err, address, family) => 
-            err || hostname === null 
-              ? res.json({error: 'Invalid URL'}) 
-              : newUrl.save((err, data) =>  
-                err 
-                  ? console.log(err)
-                  : res.send({
-                      original_url: originUrl,
-                      shorten_url: counter
-                    }))
-  )
+//   dns.lookup(hostname, (err, address, family) => 
+//             err || hostname === null 
+//               ? res.json({error: 'Invalid URL'}) 
+//               : newUrl.save((err, data) =>  
+//                 err 
+//                   ? console.log(err)
+//                   : res.send({
+//                       original_url: originUrl,
+//                       shorten_url: counter
+//                     }))
+//   )
 });
 
 app.get("/api/shorturl/:shortenUrl", (req, res) => {
