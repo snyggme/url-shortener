@@ -39,10 +39,20 @@ app.post("/api/shorturl/new", (req, res) => {
   const originUrl = req.body.url
   
   const hostname = url.parse(req.body.url).hostname
+  //Object.keys(obj).length
+  
+  Url.find({}, (err, data) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    counter = Object.keys(data).length;
+    console.log(counter);
+  })
   
   const newUrl = new Url({
     original_url: originUrl, 
-    shorten_url: ++counter
+    shorten_url: counter
   })
 
   dns.lookup(hostname, (err, address, family) => 
