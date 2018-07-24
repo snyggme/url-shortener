@@ -35,25 +35,33 @@ app.get('/', function(req, res){
   res.sendFile(process.cwd() + '/views/index.html');
 });
 
+const isUrlAlreadyExist = (url) => {
+  const isExist = false;
+  
+  Url.findOne({ original_url: url}, (err, data) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    
+    isExist = data.shorten_url
+    
+  })
+  
+  return isExist;
+}
+
 app.post("/api/shorturl/new", (req, res) => {
   const originUrl = req.body.url
   
   const hostname = url.parse(req.body.url).hostname
   //Object.keys(obj).length
   
-  Url.findOne({original_url: originUrl}, (err, data) => {
-    if (err)
-      console.log(err)
-    else {
-      res.send({
-                error: 'This site already have shorten URL',
-                original_url: originUrl,
-                shorten_url: data.shorten_url
-              })
-      return
-    } 
-  })
-  
+  if (isUrlAlreadyExist(originUrl)) {
+    res.send({ error: 'This site already have shorten URL' });
+    return;
+  }
+    
   Url.find({}, (err, data) => {
     if (err) {
       console.log(err);
