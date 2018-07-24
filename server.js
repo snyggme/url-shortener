@@ -44,8 +44,8 @@ const isUrlAlreadyExist = (url) => {
       return;
     }
     
-    isExist = data.shorten_url
-    
+    // if (typeof data.shorten_url === 'number')
+      isExist = true;
   })
   
   return isExist;
@@ -57,10 +57,10 @@ app.post("/api/shorturl/new", (req, res) => {
   const hostname = url.parse(req.body.url).hostname
   //Object.keys(obj).length
   
-  if (isUrlAlreadyExist(originUrl)) {
-    res.send({ error: 'This site already have shorten URL' });
-    return;
-  }
+  // if (isUrlAlreadyExist(originUrl)) {
+  //   res.send({ error: 'This site already have shorten URL' });
+  //   return;
+  // }
     
   Url.find({}, (err, data) => {
     if (err) {
