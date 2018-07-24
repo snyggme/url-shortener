@@ -45,7 +45,10 @@ app.post("/api/shorturl/new", (req, res) => {
       return console.log(err)
 
     if (data !== null) {
-      res.send({error: 'This site already have shorten URL'})  
+      res.send({
+        original_url: data.original_url,
+        shorten_url: data.shorten_url
+      })  
     } else {
       Url.find({}, (err, data) => {
         if (err)
